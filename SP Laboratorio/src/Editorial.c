@@ -2,7 +2,7 @@
 #include "Input.h"
 
 
-eEditorial* publisher_new()
+eEditorial* Publisher_New()
 {
 	eEditorial* pEditorial;
 
@@ -16,17 +16,17 @@ eEditorial* publisher_new()
 	return pEditorial;
 }
 
-eEditorial* publisher_newParametros(char* idStr,char* nombreStr)
+eEditorial* Publisher_NewParametros(char* idStr,char* nombreStr)
 {
 	eEditorial *pEditorial;
 
-	pEditorial = publisher_new();
+	pEditorial = Publisher_New();
 
 	if (pEditorial != NULL && idStr != NULL && nombreStr != NULL)
 	{
 		if(EsNumerico(idStr) == 0)
 		{
-			publisher_setId(pEditorial, atoi(idStr));
+			Publisher_SetId(pEditorial, atoi(idStr));
 		}
 		else
 		{
@@ -35,7 +35,7 @@ eEditorial* publisher_newParametros(char* idStr,char* nombreStr)
 
 		if(sonSoloLetras(nombreStr) == 0)
 		{
-			publisher_setNombre(pEditorial, nombreStr);
+			Publisher_SetNombre(pEditorial, nombreStr);
 		}
 		else
 		{
@@ -46,7 +46,7 @@ eEditorial* publisher_newParametros(char* idStr,char* nombreStr)
 	return pEditorial;
 }
 
-void publisher_delete(eEditorial* this)
+void Publisher_Delete(eEditorial* this)
 {
 	if(this != NULL)
 	{
@@ -56,7 +56,7 @@ void publisher_delete(eEditorial* this)
 
 //************************************************************************
 
-int publisher_setId(eEditorial* this,int id)
+int Publisher_SetId(eEditorial* this,int id)
 {
 	int retorno;
 
@@ -70,7 +70,7 @@ int publisher_setId(eEditorial* this,int id)
 
 	return retorno;
 }
-int publisher_getId(eEditorial* this,int* id)
+int Publisher_GetId(eEditorial* this,int* id)
 {
 	int retorno;
 
@@ -87,7 +87,7 @@ int publisher_getId(eEditorial* this,int* id)
 
 //************************************************************************
 
-int publisher_setNombre(eEditorial* this,char* nombre)
+int Publisher_SetNombre(eEditorial* this,char* nombre)
 {
 	int retorno;
 

@@ -9,7 +9,7 @@
 #include "Libros.h"
 #include "Editorial.h"
 
-int controller_loadFromText(char* path , LinkedList* pArrayList, int opcion)
+int Controller_LoadFromText(char* path , LinkedList* pArrayList, int opcion)
 {
 	FILE* miArchivo;
 	int retorno;
@@ -25,7 +25,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayList, int opcion)
 			switch(opcion)
 			{
 			case 0:
-				if(parser_PublisherFromText(miArchivo, pArrayList) == 0)
+				if(Parser_PublisherFromText(miArchivo, pArrayList) == 0)
 				{
 					retorno = 0;
 				}
@@ -35,7 +35,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayList, int opcion)
 				}
 				break;
 			case 1:
-				if(parser_BooksFromText(miArchivo, pArrayList) == 0)
+				if(Parser_BooksFromText(miArchivo, pArrayList) == 0)
 				{
 					retorno = 0;
 				}
@@ -52,7 +52,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayList, int opcion)
     return retorno;
 }
 
-int controller_ListBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEditorial)
+int Controller_ListBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEditorial)
 {
 	int i;
 	int len;
@@ -73,20 +73,20 @@ int controller_ListBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEdit
 
 			if(auxiliar != NULL)
 			{
-				auxiliarEditorial = controller_GetEditorial(auxiliar, pArrayListEditorial);
+				auxiliarEditorial = Controller_GetEditorial(auxiliar, pArrayListEditorial);
 
 				if(auxiliarEditorial != NULL)
 				{
 					Books_ImprimirUnLibro(auxiliar, auxiliarEditorial);
+					retorno = 0;
 				}
-				retorno = 0;
 			}
 		}
 	}
     return retorno;
 }
 
-eEditorial* controller_GetEditorial(eLibro* unLibro, LinkedList* pArrayListEditorial)
+eEditorial* Controller_GetEditorial(eLibro* unLibro, LinkedList* pArrayListEditorial)
 {
 	eEditorial* retorno;
 	eEditorial* unaEditorial;
@@ -107,7 +107,7 @@ eEditorial* controller_GetEditorial(eLibro* unLibro, LinkedList* pArrayListEdito
 
 			if(unaEditorial != NULL)
 			{
-				if(Books_GetIdEditorial(unLibro, &idEditorialLibro) == 0 && publisher_getId(unaEditorial, &idEditorial) == 0)
+				if(Books_GetIdEditorial(unLibro, &idEditorialLibro) == 0 && Publisher_GetId(unaEditorial, &idEditorial) == 0)
 				{
 					if(idEditorialLibro == idEditorial)
 					{
@@ -122,12 +122,12 @@ eEditorial* controller_GetEditorial(eLibro* unLibro, LinkedList* pArrayListEdito
 }
 
 
-int controller_SortBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEditorial)
+int Controller_SortBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEditorial)
 {
 	int retorno;
 	LinkedList* pListaOrdenada;
 
-	retorno = -1;
+	retorno = 1;
 
 	if(pArrayListBooks != NULL)
 	{
@@ -137,7 +137,7 @@ int controller_SortBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEdit
 		{
 			if(ll_sort(pListaOrdenada, Books_CompareByAutor, 1) == 0)
 			{
-				controller_ListBooks(pListaOrdenada, pArrayListEditorial);
+				Controller_ListBooks(pListaOrdenada, pArrayListEditorial);
 				retorno = 0;
 			}
 			else
@@ -154,7 +154,7 @@ int controller_SortBooks(LinkedList* pArrayListBooks, LinkedList* pArrayListEdit
 	return retorno;
 }
 
-int controller_FilterEditorial(char* path , LinkedList* pArrayList, LinkedList* pArrayListEditorial)
+int Controller_FilterEditorial(char* path , LinkedList* pArrayList, LinkedList* pArrayListEditorial)
 {
 	int retorno;
 	FILE* miArchivo;
@@ -168,9 +168,9 @@ int controller_FilterEditorial(char* path , LinkedList* pArrayList, LinkedList* 
 		nuevaLista = ll_filter(pArrayList, Books_FilterMinotauro);
 		if(miArchivo != NULL && nuevaLista != NULL)
 		{
-			if(parser_SaveAsText(miArchivo, nuevaLista) == 0)
+			if(Parser_SaveAsText(miArchivo, nuevaLista) == 0)
 			{
-				controller_ListBooks(nuevaLista, pArrayListEditorial);
+				Controller_ListBooks(nuevaLista, pArrayListEditorial);
 				retorno = 0;
 			}
 			else

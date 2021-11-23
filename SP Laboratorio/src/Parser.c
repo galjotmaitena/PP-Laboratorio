@@ -2,7 +2,7 @@
 #include "Editorial.h"
 #include "Libros.h"
 
-int parser_PublisherFromText(FILE* pFile , LinkedList* pArrayListPublisher)
+int Parser_PublisherFromText(FILE* pFile , LinkedList* pArrayListPublisher)
 {
 	eEditorial* unaEditorial;
 	char id[50];
@@ -26,7 +26,7 @@ int parser_PublisherFromText(FILE* pFile , LinkedList* pArrayListPublisher)
 
 			if(r == 2)
 			{
-				unaEditorial = publisher_newParametros(id, nombre);
+				unaEditorial = Publisher_NewParametros(id, nombre);
 
 				if(unaEditorial != NULL)
 				{
@@ -45,7 +45,7 @@ int parser_PublisherFromText(FILE* pFile , LinkedList* pArrayListPublisher)
     return retorno;
 }
 
-int parser_BooksFromText(FILE* pFile , LinkedList* pArrayListBooks)
+int Parser_BooksFromText(FILE* pFile , LinkedList* pArrayListBooks)
 {
 	eLibro* unLibro;
 	char id[50];
@@ -91,7 +91,7 @@ int parser_BooksFromText(FILE* pFile , LinkedList* pArrayListBooks)
     return retorno;
 }
 
-int parser_SaveAsText(FILE* pFile , LinkedList* pArrayList)
+int Parser_SaveAsText(FILE* pFile , LinkedList* pArrayList)
 {
 	eLibro* unLibro;
 	int auxiliarId;

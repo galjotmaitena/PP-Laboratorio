@@ -39,7 +39,7 @@ int main(void) {
 		case 1:
 			if(flagLibros == 0)
 			{
-				if(controller_loadFromText("libros.csv", listaLibros, 1) == 1)
+				if(Controller_LoadFromText("libros.csv", listaEditoiales, 0) == 1)
 				{
 					printf("ERROR");
 				}
@@ -53,7 +53,7 @@ int main(void) {
 		case 2:
 			if(flagEditoriales == 0)
 			{
-				if(controller_loadFromText("editoriales.csv", listaEditoiales, 0) == 1)
+				if(Controller_LoadFromText("editoriales.csv", listaEditoiales, 0) == 1)
 				{
 					printf("ERROR");
 				}
@@ -67,7 +67,7 @@ int main(void) {
 		case 3:
 			if(flagLibros == 1 && flagEditoriales == 1)
 			{
-				if(controller_SortBooks(listaLibros, listaEditoiales) == 1)
+				if(Controller_SortBooks(listaLibros, listaEditoiales) == 1)
 				{
 					printf("ERROR");
 				}
@@ -80,7 +80,7 @@ int main(void) {
 		case 4:
 			if(flagLibros == 1 && flagEditoriales == 1)
 			{
-				if(controller_ListBooks(listaLibros, listaEditoiales) == 1)
+				if(Controller_ListBooks(listaLibros, listaEditoiales) == 1)
 				{
 					printf("ERROR");
 				}
@@ -93,7 +93,7 @@ int main(void) {
 		case 5:
 			if(flagLibros == 1 && flagEditoriales == 1)
 			{
-				if(controller_FilterEditorial("listaFiltrada.csv", listaLibros, listaEditoiales) == 1)
+				if(Controller_FilterEditorial("listaFiltrada.csv", listaLibros, listaEditoiales) == 1)
 				{
 					printf("ERROR");
 				}
