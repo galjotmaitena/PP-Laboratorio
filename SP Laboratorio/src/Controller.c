@@ -9,15 +9,34 @@
 #include "Libros.h"
 #include "Editorial.h"
 
-int Controller_LoadFromText(char* path , LinkedList* pArrayList, int opcion)
+int Controller_LoadFromText(char* mensaje , LinkedList* pArrayList, int opcion)
 {
 	FILE* miArchivo;
 	int retorno;
+	char path[128];
 
 	retorno = 1;
 
 	if(pArrayList != NULL && path != NULL)
 	{
+		if(opcion == 0)
+		{
+			do
+			{
+				IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
+			}while(strcmp(path, "editoriales.csv") > 0 || strcmp(path, "editoriales.csv") < 0);
+		}
+		else
+		{
+			if(opcion == 1)
+			{
+				do
+				{
+					IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
+				}while(strcmp(path, "libros.csv") > 0 || strcmp(path, "libros.csv") < 0);
+			}
+		}
+
 		miArchivo = fopen(path, "r");
 
 		if(miArchivo != NULL)

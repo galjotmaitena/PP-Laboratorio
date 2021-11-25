@@ -4,21 +4,22 @@
  *  Created on: 22 nov 2021
  *      Author: EXOSMART
  */
-
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 #include "LinkedList.h"
 #include "Libros.h"
+#include "Input.h"
 
 /// \fn int controller_LoadFromText(char*, LinkedList*, int)
 /// \brief Carga los datos de las listas desde los archivos libros.csv y editoriales.csv (modo texto).
-/// \param path direccion donde se encuentra el archivo
+/// \param mensaje mensaje que indica el nombre del archivo a leer
 /// \param pArrayListPublisher  lista que luego se enviara al parser
 /// \param opcion 0 si es el archivo de editoriales o 1 si es el de libros
 /// \return retorna 0 si esta todo ok o 1 si la lista o el parser son nulos o si no se pudo parsear
-int Controller_LoadFromText(char* path , LinkedList* pArrayListPublisher, int opcion);
+int Controller_LoadFromText(char* mensaje , LinkedList* pArrayList, int opcion);
 
 /// \fn int controller_ListBooks(LinkedList*, LinkedList*)
 /// \brief Enlista los libros

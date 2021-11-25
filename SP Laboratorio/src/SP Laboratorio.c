@@ -39,7 +39,7 @@ int main(void) {
 		case 1:
 			if(flagLibros == 0)
 			{
-				if(Controller_LoadFromText("libros.csv", listaEditoiales, 0) == 1)
+				if(Controller_LoadFromText("\nIngrese el nombre del archivo libros.csv: ", listaLibros, 1) == 1)
 				{
 					printf("ERROR");
 				}
@@ -53,7 +53,7 @@ int main(void) {
 		case 2:
 			if(flagEditoriales == 0)
 			{
-				if(Controller_LoadFromText("editoriales.csv", listaEditoiales, 0) == 1)
+				if(Controller_LoadFromText("\nIngrese el nombre del archivo editoriales.csv: ", listaEditoiales, 0) == 1)
 				{
 					printf("ERROR");
 				}
