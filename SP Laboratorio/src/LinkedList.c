@@ -650,3 +650,26 @@ LinkedList* ll_filter(LinkedList* this, int (*fn)(void* element))
 
 	return listaFiltrada;
 }
+
+int ll_count(LinkedList* this, int (*fn)(void* element))
+{
+	int returnAux = -1;
+	int i;
+	int acumulador = 0;
+	void* pElement;
+
+	if(this != NULL && fn != NULL)
+	{
+		for(i = 0; i < ll_len(this); i++)
+		{
+			pElement = ll_get(this, i);
+			acumulador+= fn(pElement);
+		}
+
+		if(acumulador != 0)
+		{
+			returnAux = acumulador;
+		}
+	}
+	return returnAux;
+}

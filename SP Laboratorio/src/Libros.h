@@ -121,4 +121,10 @@ int Books_CompareByAutor(void* x, void* y);
 /// \return retorna 1 si cumple la condicion o 0 si el puntero es nulo o no cumple la condicion
 int Books_FilterMinotauro(void* unLibro);
 
+/// \fn void Books_ValidarArchivo(char*, char*)
+/// \brief Valida el nombre del archivo que escribira el usuario
+/// \param mensaje Mensaje que le indica al usuario que nombre de archivo ingresar
+/// \param path cadena donde se guardara el nombre del archivo
+void Books_ValidarArchivo(char* mensaje, char* path);
+
 #endif /* LIBROS_H_ */

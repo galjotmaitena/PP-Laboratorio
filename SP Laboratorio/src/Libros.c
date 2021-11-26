@@ -10,7 +10,7 @@ eLibro* Books_New()
 
 	if(pLibro == NULL)
 	{
-		exit(EXIT_FAILURE) ;
+		exit(EXIT_FAILURE);
 	}
 
 	return pLibro;
@@ -310,4 +310,17 @@ int Books_FilterMinotauro(void* unLibro)
 	}
 
 	return retorno;
+}
+
+//************************************************************************
+
+void Books_ValidarArchivo(char* mensaje, char* path)
+{
+	if(mensaje != NULL && path != NULL)
+	{
+		do
+		{
+			IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
+		}while(strcmp(path, "libros.csv") > 0 || strcmp(path, "libros.csv") < 0);
+	}
 }

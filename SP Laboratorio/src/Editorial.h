@@ -51,5 +51,9 @@ int Publisher_SetNombre(eEditorial* this,char* nombre);
 /// \return retorna 0 si salio todo bien o 1 si los punteros son nulos
 int Publisher_GetNombre(eEditorial* this,char* nombre);
 
-
+/// \fn void Publisher_ValidarArchivo(char*, char*)
+/// \brief Valida el nombre del archivo que escribira el usuario
+/// \param mensaje Mensaje que le indica al usuario que nombre de archivo ingresar
+/// \param path cadena donde se guardara el nombre del archivo
+void Publisher_ValidarArchivo(char* mensaje, char* path);
 #endif /* EDITORIAL_H_ */

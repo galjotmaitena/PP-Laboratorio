@@ -1,9 +1,3 @@
-/*
- * Controller.c
- *
- *  Created on: 22 nov 2021
- *      Author: EXOSMART
- */
 #include "Controller.h"
 #include "Parser.h"
 #include "Libros.h"
@@ -21,19 +15,13 @@ int Controller_LoadFromText(char* mensaje , LinkedList* pArrayList, int opcion)
 	{
 		if(opcion == 0)
 		{
-			do
-			{
-				IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
-			}while(strcmp(path, "editoriales.csv") > 0 || strcmp(path, "editoriales.csv") < 0);
+			Publisher_ValidarArchivo(mensaje, path);
 		}
 		else
 		{
 			if(opcion == 1)
 			{
-				do
-				{
-					IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
-				}while(strcmp(path, "libros.csv") > 0 || strcmp(path, "libros.csv") < 0);
+				Books_ValidarArchivo(mensaje, path);
 			}
 		}
 

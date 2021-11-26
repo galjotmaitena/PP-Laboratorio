@@ -118,3 +118,13 @@ int Publisher_GetNombre(eEditorial* this,char* nombre)
 
 //************************************************************************
 
+void Publisher_ValidarArchivo(char* mensaje, char* path)
+{
+	if(mensaje != NULL && path != NULL)
+	{
+		do
+		{
+			IngresarCadena(path, mensaje, "\nIngreso invalido", 128, 2);
+		}while(strcmp(path, "editoriales.csv") > 0 || strcmp(path, "editoriales.csv") < 0);
+	}
+}
