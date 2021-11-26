@@ -14,7 +14,7 @@
 typedef struct
 {
 	int idLocalidad;
-	char localidad[128];
+	char localidad[128];;
 	int isEmpty;
 }eLocalidad;
 
@@ -24,5 +24,6 @@ int MostrarListaLocalidades(eLocalidad listaLocalidades[], int tamanio);
 int ValidarId(eLocalidad listaLocalidades[], int tamanio, int id);
 int BuscarLocalidadPorId(eLocalidad listaLocalidades[], int tamanio, int id);
 int BuscarPorIndice(eLocalidad listaLocalidades[], int tamanio, int index);
+int PrecioYKmPorLocalidad(int id, float *precio, float *km);
 
 #endif /* LOCALIDAD_H_ */

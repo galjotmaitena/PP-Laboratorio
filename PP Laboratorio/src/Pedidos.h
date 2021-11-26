@@ -25,6 +25,7 @@ typedef struct
 {
 	int id;
 	int idEmpresa;
+	int idTransporte;
 	float cantidadKilos;
 	eTipoDePlastico tiposDePlastico;
 	int isEmpty;

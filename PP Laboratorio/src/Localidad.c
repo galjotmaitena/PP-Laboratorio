@@ -117,3 +117,45 @@ int BuscarPorIndice(eLocalidad listaLocalidades[], int tamanio, int index)
 
 	return retorno;
 }
+
+int PrecioYKmPorLocalidad(int id, float *precio, float *km)
+{
+	int retorno;
+	float valorDelEnvio;
+	float auxiliarKm;
+
+	retorno = -1;
+
+	if(precio != NULL && km != NULL)
+	{
+		switch(id)
+		{
+		case 1:
+			valorDelEnvio = 900;
+			auxiliarKm = 500;
+			break;
+		case 2:
+			valorDelEnvio = 1100;
+			auxiliarKm = 650;
+			break;
+		case 3:
+			valorDelEnvio = 1300;
+			auxiliarKm = 1000;
+			break;
+		case 4:
+			valorDelEnvio = 100;
+			auxiliarKm = 100;
+			break;
+		case 5:
+			valorDelEnvio = 1950;
+			auxiliarKm = 1500;
+			break;
+		}
+
+		*precio = valorDelEnvio;
+		*km = auxiliarKm;
+		retorno = 0;
+	}
+
+	return retorno;
+}

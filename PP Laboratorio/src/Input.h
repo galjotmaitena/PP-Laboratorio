@@ -17,6 +17,9 @@ int Menu(char opciones[]);
 int IngresarCadena(char cadena[], char mensaje[], char mensajeError[], int tamanio, int reintentos);
 int GetString(char cadena[], int tamanio);
 
+int IngresarCadenaAlfanumerica(char cadena[], char mensaje[], char mensajeError[], int tamanio, int reintentos);
+int GetAlfanumerica(char cadena[], int tamanio);
+
 int IngresarEntero(char mensaje[], char mensajeError[], int*resultado, int reintentos);
 int GetInt(int* resultado);
 
@@ -25,6 +28,7 @@ int GetFloat(float* resultado);
 
 int EsNumerico(char cadena[]);
 int sonSoloLetras(char cadena[]);
+int EsAlfanumerica(char cadena[]);
 
 int GenerarId(int* idContador);
 

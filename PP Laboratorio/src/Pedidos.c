@@ -1,10 +1,3 @@
-/*
- * Pedidos.c
- *
- *  Created on: 1 nov 2021
- *      Author: EXOSMART
- */
-
 #include "Pedidos.h"
 
 int InicializarPedidos(ePedido lista[], int tamanio)
@@ -57,7 +50,7 @@ int BuscarPosicionPedido(ePedido lista[], int tamanio, int id)
 	int retorno;
 	int i;
 
-	retorno = 1;
+	retorno = -1;
 
 	if(lista != NULL && tamanio > 0)
 	{

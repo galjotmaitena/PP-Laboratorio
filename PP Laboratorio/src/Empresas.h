@@ -1,15 +1,8 @@
-/*
- * Empresas.h
- *
- *  Created on: 1 nov 2021
- *      Author: EXOSMART
- */
 #include <stdio.h>
 #ifndef EMPRESAS_H_
 #define EMPRESAS_H_
 
 #include "Input.h"
-
 
 #define TAM 5
 
@@ -18,6 +11,7 @@
 
 #include "Pedidos.h"
 #include "Localidad.h"
+#include "Transporte.h"
 
 typedef struct
 {
@@ -38,8 +32,9 @@ typedef struct
 int InicializarEmpresas(eEmpresa lista[], int tamanio);
 
 int Alta(eEmpresa lista[], int tamanio, eLocalidad listaLocalidades[], int tamanioLocalidad, int* idContador);
-eEmpresa UnaEmpresa(int* idContador);
+eEmpresa UnaEmpresa(eLocalidad listaLocalidades[], int tamanioLocalidad, int* idContador);
 
+int ValidarIdEmpresas(eEmpresa listaEmpresas[], int tamanioEmpresas, int* id, char* mensaje);
 
 int MostrarListaDeEmpresas(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades);
 void MostrarUnaEmpresa(eEmpresa empresa, eLocalidad lista[], int tamanio);
@@ -56,24 +51,9 @@ int Baja(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalida
 int MostrarListaDePedidos(ePedido listaPedidos[], int tamanioPedido, eEmpresa lista[], int tamanio);
 void MostrarUnPedido(ePedido pedido, eEmpresa empresa);
 
-int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedido[], int tamanioPedido, eLocalidad listaLocalidades[], int tamanioLocalidades, int* id);
-
+int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedido[], int tamanioPedido, eLocalidad listaLocalidades[], int tamanioLocalidades, eTransporte listaTransportes[], int tamanioTransportes, int* idTransporte, int* idPedido);
 int BuscarPorIdPedido(ePedido listaPedido[], int tamanioPedido, char mensaje[], eEmpresa lista[], int tamanio);
 
+int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, eTransporte listaTransportes[], int tamanioTransportes);
 
-int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio);
-
-int ImprimirClientesConPedidosPendientes(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades);
-int BuscarEmpresa(eEmpresa lista[], int tamanio, int id);
-int ContarPedidos(ePedido listaPedido[], int tamanioPedido, eEmpresa unaEmpresa,int estado, int* contador);
-/*
-int ImprimirClientesConPedidosPendientes(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades);
-int CantidadDePedidosPendientesPorEmpresa(ePedido listaPedido[], int tamanioPedido, eEmpresa unaEmpresa, int estado);
-int BuscarEmpresasConPedidosPendientes(eEmpresa lista[], int tamanio, int id);
-
-int ImprimirPedidos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, int estado);
-
-int BuscarPedidosPendientesPorLocalidad(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades);
-int BuscarPorLocalidad(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades,int* idLocalidad);
-*/
 #endif /* EMPRESAS_H_ */

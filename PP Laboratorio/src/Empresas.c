@@ -1,12 +1,32 @@
-/*
- * Empresas.c
- *
- *  Created on: 1 nov 2021
- *      Author: EXOSMART
- */
-
 #include "Empresas.h"
 
+
+int ValidarIdEmpresas(eEmpresa listaEmpresas[], int tamanioEmpresas, int* id, char* mensaje)
+{
+	int retorno;
+	int i;
+
+	retorno = -1;
+
+	if(listaEmpresas != NULL && tamanioEmpresas > 0 && id != NULL)
+	{
+		do
+		{
+			IngresarEntero(mensaje, "\nID invalido", id, 2);
+
+			for(i = 0; i < tamanioEmpresas; i++)
+			{
+				if(listaEmpresas[i].id == *id)
+				{
+					retorno = 0;
+				}
+			}
+
+		}while(retorno != 0);
+	}
+
+	return retorno;
+}
 
 int BuscarPorId(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades, char mensaje[])
 {
@@ -23,7 +43,7 @@ int BuscarPorId(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaL
 		}
 		else
 		{
-			IngresarEntero(mensaje, "\nID invalido", &id, 2);
+			ValidarIdEmpresas(listaEmpresas, tamanioEmpresas, &id, mensaje);
 
 			retorno = BuscarPosicion(listaEmpresas, tamanioEmpresas, id);
 		}
@@ -59,6 +79,7 @@ int BuscarPorIdPedido(ePedido listaPedido[], int tamanioPedido, char mensaje[], 
 {
 	int retorno;
 	int id;
+	int retornoFuncion;
 
 	retorno = -1;
 
@@ -70,9 +91,14 @@ int BuscarPorIdPedido(ePedido listaPedido[], int tamanioPedido, char mensaje[], 
 		}
 		else
 		{
-			IngresarEntero(mensaje, "\nID invalido", &id, 2);
+			do
+			{
+				IngresarEntero(mensaje, "\nID invalido", &id, 2);
 
-			retorno = BuscarPosicionPedido(listaPedido, tamanioPedido, id);
+				retornoFuncion = BuscarPosicionPedido(listaPedido, tamanioPedido, id);
+			}while(retornoFuncion == -1);
+
+			retorno = retornoFuncion;
 		}
 	}
 
@@ -115,9 +141,7 @@ int Alta(eEmpresa lista[], int tamanio, eLocalidad listaLocalidades[], int taman
 		{
 			if(lista[i].isEmpty == TRUE)
 			{
-				MostrarListaLocalidades(listaLocalidades, tamanioLocalidad);
-
-				lista[i] = UnaEmpresa(idContador);
+				lista[i] = UnaEmpresa(listaLocalidades, tamanioLocalidad, idContador);
 				retorno = 0;
 				break;
 			}
@@ -127,11 +151,11 @@ int Alta(eEmpresa lista[], int tamanio, eLocalidad listaLocalidades[], int taman
 	return retorno;
 }
 
-eEmpresa UnaEmpresa(int* idContador)
+eEmpresa UnaEmpresa(eLocalidad listaLocalidades[], int tamanioLocalidad, int* idContador)
 {
 	eEmpresa unaEmpresa;
 
-	if(idContador != NULL)
+	if(listaLocalidades != NULL && tamanioLocalidad > 0 && idContador != NULL)
 	{
 		if(GenerarId(idContador) != -1)
 		{
@@ -141,8 +165,12 @@ eEmpresa UnaEmpresa(int* idContador)
 			IngresarEntero("\nIngrese el cuit: ", "\nIngreso invalido", &unaEmpresa.cuit, 2);
 			IngresarCadena(unaEmpresa.direccion.calle, "\nIngrese la calle: ", "\nIngreso invalido", 51, 2);
 			IngresarEntero("\nIngrese numero del edificio: ", "\nIngreso invalido", &unaEmpresa.direccion.numero, 2);
-			IngresarEntero("\nIngrese el id de la localidad de la empresa", "\nIngreso invalido", &unaEmpresa.idLocalidad, 2);
 
+			MostrarListaLocalidades(listaLocalidades, tamanioLocalidad);
+			do
+			{
+				IngresarEntero("\nIngrese el id de la localidad de la empresa: ", "\nIngreso invalido", &unaEmpresa.idLocalidad, 2);
+			}while(ValidarId(listaLocalidades, tamanioLocalidad, unaEmpresa.idLocalidad) != 0);
 
 			unaEmpresa.isEmpty = FALSE;
 		}
@@ -417,7 +445,7 @@ int CambiarEstado(eEmpresa lista[], int tamanio, int index)
 
 //************************************************************************//
 
-int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedido[], int tamanioPedido, eLocalidad listaLocalidades[], int tamanioLocalidades, int* id)
+int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedido[], int tamanioPedido, eLocalidad listaLocalidades[], int tamanioLocalidades, eTransporte listaTransportes[], int tamanioTransportes, int* idTransporte, int* idPedido)
 {
 	int retorno;
 	int index;
@@ -425,7 +453,7 @@ int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedi
 
 	retorno = -1;
 
-	if(listaEmpresas != NULL && tamanioEmpresas > 0 && listaPedido != NULL && tamanioPedido > 0 && listaLocalidades != NULL && tamanioLocalidades > 0)
+	if(listaEmpresas != NULL && tamanioEmpresas > 0 && listaPedido != NULL && tamanioPedido > 0 && listaLocalidades != NULL && tamanioLocalidades > 0 && listaTransportes != NULL && tamanioTransportes > 0)
 	{
 		index = BuscarPorId(listaEmpresas, tamanioEmpresas, listaLocalidades, tamanioLocalidades, "\nIngrese el ID de la empresa en la que quiere agregar un pedido: ");
 
@@ -433,22 +461,26 @@ int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedi
 		{
 			if(listaPedido[i].isEmpty == SIN_HACER)
 			{
-				if(IngresarCantidadDeKilosARecolectar(listaPedido, tamanioPedido, i, id) == 0)
+				if(IngresarCantidadDeKilosARecolectar(listaPedido, tamanioPedido, i, idPedido) == 0)
 				{
-					//listaEmpresas[index].idPedido = *id;
 					listaPedido[i].idEmpresa = listaEmpresas[index].id;
 
 					printf("\n***********************************************************");
 					MostrarUnPedido(listaPedido[i], listaEmpresas[index]);
 					printf("\n***********************************************************");
 
+					if(CargaDelTransporte(listaTransportes, tamanioTransportes, listaLocalidades, tamanioLocalidades, idTransporte) == 0)
+					{
+						listaPedido[i].idTransporte = *idTransporte;
+						printf("\n%d", listaPedido[i].idTransporte);
+						printf("\nFUNCIONO");
+					}
 					retorno = 0;
 
 					break;
 				}
 			}
 		}
-
 	}
 
 	return retorno;
@@ -456,7 +488,7 @@ int CrearPedido(eEmpresa listaEmpresas[], int tamanioEmpresas, ePedido listaPedi
 
 //************************************************************************//
 
-int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio)
+int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, eTransporte listaTransportes[], int tamanioTransportes)
 {
 	int retorno;
 	int index;
@@ -464,7 +496,7 @@ int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[],
 
 	retorno = -1;
 
-	if(listaPedido != NULL && tamanioPedido > 0 && lista != NULL && tamanio > 0)
+	if(listaPedido != NULL && tamanioPedido > 0 && lista != NULL && tamanio > 0 && listaTransportes != NULL && tamanioTransportes > 0)
 	{
 		index = BuscarPorIdPedido(listaPedido, tamanio, "\nIngrese el ID del pedido que desea setear: ", lista, tamanio);
 
@@ -475,6 +507,11 @@ int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[],
 
 		listaPedido[index].isEmpty = COMPLETADO;
 
+		if(CambiarEstadoTransporte(listaPedido[index].idTransporte, listaTransportes, tamanio, ENVIADO) == 0)
+		{
+			printf("\nFUNCIONO");
+		}
+
 		MostrarCantidadPorTipoDePlatico(listaPedido[index]);
 
 		retorno = 0;
@@ -482,249 +519,3 @@ int ProcesarResiduos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[],
 
 	return retorno;
 }
-
-//************************************************************************//
-//************************************************************************//
-int ImprimirClientesConPedidosPendientes(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades)
-{
-	int retorno;
-	int i;
-	int index;
-	int contador;
-
-	retorno = -1;
-
-	if(listaEmpresas != NULL && tamanioEmpresas > 0 && listaLocalidades != NULL && tamanioLocalidades > 0 && listaPedido != NULL && tamanioPedido > 0)
-	{
-		printf("\nEmpresas con pedidos pendientes");
-
-		printf("\n***********************************************************");
-
-		for(i = 0; i < tamanioEmpresas; i++)
-		{
-			if(listaPedido[i].isEmpty == PENDIENTE)
-			{
-				index = BuscarEmpresa(listaEmpresas, tamanioEmpresas, listaPedido[i].idEmpresa);
-
-				if(index != -1)
-				{
-					MostrarUnaEmpresa(listaEmpresas[index], listaLocalidades, tamanioLocalidades);
-					ContarPedidos(listaPedido, tamanioPedido, listaEmpresas[index], PENDIENTE, &contador);
-printf("\n%d",contador);
-					retorno = 0;
-				}
-			}
-		}
-
-
-			printf("\nCantidad de pedidos de recoleccion: %d", contador);
-
-
-		printf("\n***********************************************************");
-	}
-
-	return retorno;
-}
-
-int BuscarEmpresa(eEmpresa lista[], int tamanio, int id)
-{
-	int retorno;
-	int i;
-
-	retorno = -1;
-
-	if(lista != NULL && tamanio > 0)
-	{
-		for(i = 0; i < tamanio; i++)
-		{
-			if(lista[i].id == id)
-			{
-				retorno = i;
-			}
-		}
-	}
-
-	return retorno;
-}
-
-int ContarPedidos(ePedido listaPedido[], int tamanioPedido, eEmpresa unaEmpresa,int estado, int* contador)
-{
-	int retorno;
-	int i;
-	int contadorAuxiliar;
-
-	retorno = -1;
-	contadorAuxiliar = 0;
-
-	if(listaPedido != NULL && tamanioPedido > 0)
-	{
-		for(i = 0; i < tamanioPedido; i++)
-		{
-			if(listaPedido[i].idEmpresa == unaEmpresa.id && listaPedido[i].isEmpty == estado)
-			{
-				contadorAuxiliar++;
-				retorno = 0;
-			}
-		}
-
-		*contador = contadorAuxiliar;
-	}
-
-	return retorno;
-}
-//************************************************************************//
-//************************************************************************//
-/*
-int ImprimirClientesConPedidosPendientes(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades)
-{
-	int retorno;
-	int i;
-	int cantidadDePedidos;
-	int index;
-
-	retorno = -1;
-	cantidadDePedidos = 0;
-
-	if(listaPedido != NULL && tamanioPedido > 0 && listaEmpresas != NULL && tamanioEmpresas > 0 && listaLocalidades != NULL && tamanioLocalidades > 0)
-	{
-		printf("\nEmpresas con pedidos pendientes");
-
-		printf("\n***********************************************************");
-		for(i = 0; i < tamanioEmpresas; i++)
-		{
-			index = BuscarEmpresasConPedidosPendientes(listaEmpresas, tamanioEmpresas, listaPedido[i].id);
-
-			if(index != -1)
-			{
-				MostrarUnaEmpresa(listaEmpresas[index], listaLocalidades, tamanioLocalidades);
-				retorno = 0;
-
-				cantidadDePedidos++;
-			}
-		}
-
-		if(cantidadDePedidos != 0)
-		{
-			printf("\nCantidad de pedidos de recoleccion: %d", cantidadDePedidos);
-		}
-
-		printf("\n***********************************************************");
-	}
-
-	return retorno;
-}
-
-
-
-int BuscarEmpresasConPedidosPendientes(eEmpresa lista[], int tamanio, int id)
-{
-	int retorno;
-	int i;
-
-	retorno = -1;
-
-	if(lista != NULL && tamanio > 0 && id > 0)
-	{
-		for(i = 0; i < tamanio; i++)
-		{
-			if(lista[i].idPedido == id)
-			{
-				retorno = i;
-			}
-		}
-	}
-
-	return retorno;
-}
-
-
-int ImprimirPedidos(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, int estado)
-{
-	int retorno;
-	int i;
-	int index;
-
-	retorno = -1;
-
-	if(listaPedido != NULL && tamanioPedido > 0 && lista != NULL && tamanio > 0)
-	{
-		printf("\n***********************************************************");
-		for(i = 0; i < tamanio; i++)
-		{
-			if(listaPedido[i].isEmpty == estado)
-			{
-				index = BuscarEmpresasConPedidosPendientes(lista, tamanio, listaPedido[i].id);
-
-				if(index != -1)
-				{
-					printf("\n%d %d %s %.2f", lista[index].cuit, lista[index].direccion.numero, lista[index].direccion.calle, listaPedido[i].cantidadKilos);
-					retorno = 0;
-				}
-			}
-		}
-
-		printf("\n***********************************************************");
-	}
-
-	return retorno;
-}
-
-
-
-int BuscarPedidosPendientesPorLocalidad(ePedido listaPedido[], int tamanioPedido, eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades)
-{
-	int retorno;
-	int i;
-	int index;
-	int auxiliarId;
-	int cantidadDePedidosPendientes;
-
-	retorno = -1;
-
-	if(listaPedido != NULL && tamanioPedido > 0 && listaEmpresas != NULL && tamanioEmpresas > 0 && listaLocalidades != NULL && tamanioLocalidades > 0)
-	{
-		BuscarPorLocalidad(listaEmpresas, tamanioEmpresas, listaLocalidades, tamanioLocalidades, &auxiliarId);
-
-		printf("\n***********************************************************");
-		for(i = 0; i < tamanioEmpresas; i++)
-		{
-			index = BuscarEmpresasConPedidosPendientes(listaEmpresas, tamanioEmpresas, listaPedido[i].id);
-
-			if(auxiliarId == listaEmpresas[index].idLocalidad)
-			{
-				cantidadDePedidosPendientes++;
-			}
-		}
-		if(cantidadDePedidosPendientes != 0)
-		{
-			printf("\nCantidad de pedidos de recoleccion: %d", cantidadDePedidosPendientes);
-			retorno = 0;
-		}
-
-			printf("\n***********************************************************");
-	}
-
-		return retorno;
-}
-
-int BuscarPorLocalidad(eEmpresa listaEmpresas[], int tamanioEmpresas, eLocalidad listaLocalidades[], int tamanioLocalidades,int* idLocalidad)
-{
-	int retorno;
-	int auxiliarId;
-
-	retorno = -1;
-
-	if(listaEmpresas != NULL && tamanioEmpresas > 0)
-	{
-		MostrarListaLocalidades(listaLocalidades, tamanioLocalidades);
-
-		IngresarEntero("\nIngrese el id de la localidad que desea revisar: ", "\nIngreso invalido", &auxiliarId, 2);
-
-		*idLocalidad = auxiliarId;
-
-		retorno = 0;
-	}
-
-	return retorno;
-}
-*/

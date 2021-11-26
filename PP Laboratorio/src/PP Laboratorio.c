@@ -7,7 +7,8 @@ Galjot Maitena divB
 #include <stdio.h>
 #include <stdlib.h>
 #include "Input.h"
-#include "Empresas.h"
+
+#include "Informes.h"
 
 #define SIN_HACER -1
 #define PENDIENTE 0
@@ -26,11 +27,22 @@ int main(void) {
 								   {3, "Pompeya", FALSE},
 								   {4, "Caballito", FALSE},
 								   {5, "San Vicente", FALSE}};
+	eTransporte transportes[TAM];
 	int id;
 	int idPedido;
+	int idTransporte;
+
+	int flagAlta;
+	int flagPedidoPendiente;
+	int flagPedidoProcesado;
 
 	id = 1000;
 	idPedido = 2000;
+	idTransporte = 150;
+
+	flagAlta = 0;
+	flagPedidoPendiente = 0;
+	flagPedidoProcesado = 0;
 
 	InicializarEmpresas(empresas, TAM);
 	InicializarPedidos(pedidos, TAM);
@@ -42,7 +54,8 @@ int main(void) {
 				"\n4. Crear pedidio de recoleccion.\n5. Procesar residuos."
 				"\n6. Imprimir clientes con pedidos pendientes y cantidad de pedidos de recoleccion."
 				"\n7. Imprimir pedidos pendientes.\n8. Imprimir pedidos procesados."
-				"\n9. Pedidos pendientes en localidad.\n10. Promedio.\n11. SALIR.");
+				"\n9. Pedidos pendientes en localidad.\n10. Promedio.\n11. Clientes con mas pedidos pendientes."
+				"\n12. Clientes con mas pedidos completados\n13. SALIR");
 
 		switch(opcion)
 		{
@@ -51,8 +64,8 @@ int main(void) {
 
 			if(Alta(empresas, TAM, localidades, TAM, &id) == 0)
 			{
-
 				printf("\nEl id de la empresa sera %d\n", id);
+				flagAlta = 1;
 			}
 			else
 			{
@@ -60,93 +73,181 @@ int main(void) {
 			}
 			break;
 		case 2:
-			printf("\nMODIFICAR datos de cliente");
-
-			if(Modificar(empresas, TAM, localidades, TAM) == 0)
+			if(flagAlta == 1)
 			{
+				printf("\nMODIFICAR datos de cliente");
 
-				printf("\nLa modificacion fue exitosa\n");
+				if(Modificar(empresas, TAM, localidades, TAM) == 0)
+				{
+
+					printf("\nLa modificacion fue exitosa\n");
+				}
+				else
+				{
+					printf("\nNo se pudo realizar la modificacion");
+				}
 			}
 			else
 			{
-				printf("\nNo se pudo realizar la modificacion");
+				printf("\nPrimero debe dar de alta");
 			}
 
 			break;
 		case 3:
-			printf("\nBAJA de cliente");
-
-			if(Baja(empresas, TAM, localidades, TAM) == 0)
+			if(flagAlta == 1)
 			{
+				printf("\nBAJA de cliente");
 
-				printf("\nLa baja fue exitosa\n");
+				if(Baja(empresas, TAM, localidades, TAM) == -1)
+				{
+
+					printf("\nNo se pudo dar de baja");
+				}
 			}
 			else
 			{
-				printf("\nNo se pudo dar de baja");
+				printf("\nPrimero debe dar de alta");
 			}
 
 			break;
 		case 4:
-			printf("\nCrear pedidio de recoleccion");
-
-			if(CrearPedido(empresas, TAM, pedidos, TAM, localidades, TAM, &idPedido) == -1)
+			if(flagAlta == 1)
 			{
-				printf("No se pudo cargar el pedido");
+				printf("\nCrear pedidio de recoleccion");
+
+				if(CrearPedido(empresas, TAM, pedidos, TAM, localidades, TAM, transportes, TAM, &idTransporte, &idPedido) == -1)
+				{
+					printf("No se pudo cargar el pedido");
+				}
+				else
+				{
+					flagPedidoPendiente = 1;
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe dar de alta");
 			}
 			break;
 		case 5:
-			printf("\nProcesar residuos");
-			if(ProcesarResiduos(pedidos, TAM, empresas, TAM) == -1)
+			if(flagPedidoPendiente == 1)
 			{
-				printf("No se pudo procesar el pedido");
+				printf("\nProcesar residuos");
+				if(ProcesarResiduos(pedidos, TAM, empresas, TAM, transportes, TAM) == -1)
+				{
+					printf("No se pudo procesar el pedido");
+				}
+				else
+				{
+					flagPedidoProcesado = 1;
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe crear un pedido");
 			}
 			break;
 		case 6:
-			printf("\nImprimir clientes");
-
-			if(ImprimirClientesConPedidosPendientes(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
+			if(flagPedidoPendiente == 1)
 			{
-				printf("No hay clientes con pedidos pendientes que mostrar");
+				printf("\nImprimir clientes con pedidos pendientes");
+
+				if(ImprimirClientesConPedidosPendientes(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
+				{
+					printf("No hay clientes con pedidos pendientes que mostrar");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe crear un pedido");
+			}
+			break;
+		case 7:
+			if(flagPedidoPendiente == 1)
+			{
+				printf("\nImprimir pedidos pendientes");
+
+				printf("\nPedidos Pendientes");
+				if(ImprimirPedidos(pedidos, TAM, empresas, TAM, PENDIENTE) == -1)
+				{
+					printf("No hay pedidos pendientes que mostrar");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe crear un pedido");
 			}
 
 			break;
-		case 7:
-			printf("\nImprimir pedidos pendientes");
-
-			printf("\nPedidos Pendientes");
-			/*if(ImprimirPedidos(pedidos, TAM, empresas, TAM, PENDIENTE) == -1)
-			{
-				printf("No hay pedidos pendientes que mostrar");
-			}*/
-			break;
 		case 8:
-			printf("\nImprimir pedidos procesados");
+			if(flagPedidoProcesado == 1)
+			{
+				printf("\nImprimir pedidos procesados");
 
-			printf("\nPedidos Completados");
-			//if(ImprimirPedidos(pedidos, TAM, empresas, TAM, COMPLETADO) == -1)
-			//{
-				//printf("No hay pedidos pendientes que mostrar");
-			//}
+				printf("\nPedidos Completados");
+				if(ImprimirPedidos(pedidos, TAM, empresas, TAM, COMPLETADO) == -1)
+				{
+					printf("No hay pedidos pendientes que mostrar");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe procesar el pedido");
+			}
 			break;
 		case 9:
-			printf("\nPedidos pendientes en localidad");
+			if(flagPedidoPendiente == 1)
+			{
+				printf("\nPedidos pendientes en localidad");
 
-			//if(BuscarPedidosPendientesPorLocalidad(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
-			//{
-				//printf("No hay pedidos pendientes que mostrar");
-			//}
+				if(BuscarPedidosPendientesPorLocalidad(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
+				{
+					printf("No hay pedidos pendientes que mostrar");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe crear un pedido");
+			}
 			break;
 		case 10:
 			printf("\nPromedio");
+			if(ContarKilosDePP(pedidos, TAM, empresas, TAM) == -1)
+			{
+				printf("\nERROR");
+			}
 			break;
 		case 11:
+			printf("\nCliente con mas pedidos pendientes");
+			if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, PENDIENTE) == -1)
+			{
+				printf("\nERROR");
+			}
+			break;
+		case 12:
+			printf("\nCliente con mas pedidos completados");
+			if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, COMPLETADO) == -1)
+			{
+				printf("\nERROR");
+			}
+			break;
+		case 13:
+			if(EmpresasConPedidosEnviados(pedidos, TAM, empresas, TAM, transportes, TAM, localidades, TAM) == 0)
+			{
+				printf("\nFUNCIONOOO");
+			}
+			else
+			{
+				printf("\nNo FUNCIONOOO");
+			}
+			break;
+		case 14:
 			printf("\nSALIR");
 			break;
 		default:
 			printf("\nOpcion invalida");
 		}
-	}while(opcion != 11);
+	}while(opcion != 14);
 
 	return EXIT_SUCCESS;
 }

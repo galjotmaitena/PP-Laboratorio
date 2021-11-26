@@ -12,7 +12,7 @@ int Menu(char opciones[])
 	int opcion;
 
 	printf("%s\n", opciones);
-	scanf("%d", &opcion);
+	IngresarEntero("\nIngrese una opcion: ", "Ingreso invalido", &opcion, 2);
 
 	return opcion;
 }
@@ -57,6 +57,57 @@ int GetString(char cadena[], int tamanio)
 	fgets(auxiliar, tamanio, stdin);
 
 	if(sonSoloLetras(auxiliar) == 0)
+	{
+		strtok(auxiliar, "\n");
+		strncpy(cadena, auxiliar, tamanio);
+		retorno = 0;
+	}
+
+	return retorno;
+}
+
+//**************************************************************************************************
+
+int IngresarCadenaAlfanumerica(char cadena[], char mensaje[], char mensajeError[], int tamanio, int reintentos)
+{
+	int retorno;
+
+	retorno = 1;
+
+	if(cadena!=NULL && mensaje != NULL)
+	{
+		while(reintentos > 0)
+		{
+			printf("%s", mensaje);
+
+			if(GetAlfanumerica(cadena, tamanio) == 0)
+			{
+				retorno = 0;
+				break;
+			}
+			else
+			{
+				printf("%s", mensajeError);
+				reintentos--;
+			}
+		}
+
+	}
+
+	return retorno;
+}
+
+int GetAlfanumerica(char cadena[], int tamanio)
+{
+	int retorno;
+	char auxiliar[tamanio];
+
+	retorno = 1;
+
+	fflush(stdin);
+	fgets(auxiliar, tamanio, stdin);
+
+	if(EsAlfanumerica(auxiliar) == 0)
 	{
 		strtok(auxiliar, "\n");
 		strncpy(cadena, auxiliar, tamanio);
@@ -228,6 +279,34 @@ int sonSoloLetras(char cadena[])
 	}
 
 	return retorno;
+}
+
+int EsAlfanumerica(char cadena[])
+{
+	int retorno;
+	int i;
+
+	retorno = 1;
+	i = 0;
+
+	while(cadena[i] != '\0')
+	{
+		if(isalpha(cadena[i])!=0 || isspace(cadena[i]) != 0 || isdigit(cadena[i])!=0)
+		{
+			retorno = 0;
+		}
+		else
+		{
+			if(cadena[i] != '\0' && cadena[i] != '\n')
+			{
+				retorno = 1;
+				break;
+			}
+		}
+		i++;
+	}
+
+		return retorno;
 }
 
 //**********************************************************************************************
