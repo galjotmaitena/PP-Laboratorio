@@ -47,6 +47,7 @@ int main(void) {
 	InicializarEmpresas(empresas, TAM);
 	InicializarPedidos(pedidos, TAM);
 	//InicializarLocalidad(localidades, TAM);
+	InicializarTransporte(transportes, TAM);
 
 	do
 	{

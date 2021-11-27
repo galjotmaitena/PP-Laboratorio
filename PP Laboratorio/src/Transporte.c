@@ -29,20 +29,17 @@ int CargaDelTransporte(eTransporte listaTransportes[], int tamanio, eLocalidad l
 
 	if(listaTransportes != NULL && tamanio > 0 && listaLocalidades != NULL && tamanioLocalidades > 0 && id != NULL)
 	{
-		if(InicializarTransporte(listaTransportes, tamanio) == 0)
+		for(i = 0; i < tamanio; i++)
 		{
-			for(i = 0; i < tamanio; i++)
+			if(listaTransportes[i].isEmpty == SIN_HACER)
 			{
-				if(listaTransportes[i].isEmpty == SIN_HACER)
-				{
-					listaTransportes[i] = UnTransporte(id, listaLocalidades, tamanioLocalidades);
-					index = BuscarLocalidadPorId(listaLocalidades, tamanioLocalidades, listaTransportes[i].idLocalidad);
+				listaTransportes[i] = UnTransporte(id, listaLocalidades, tamanioLocalidades);
+				index = BuscarLocalidadPorId(listaLocalidades, tamanioLocalidades, listaTransportes[i].idLocalidad);
 
-					MostrarUnEnvio(listaTransportes[i], listaLocalidades[index]);
+				MostrarUnEnvio(listaTransportes[i], listaLocalidades[index]);
 
-					retorno = 0;
-					break;
-				}
+				retorno = 0;
+				break;
 			}
 		}
 	}
