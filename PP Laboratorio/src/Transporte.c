@@ -19,7 +19,7 @@ int InicializarTransporte(eTransporte listaTransportes[], int tamanio)
 	return retorno;
 }
 
-int CargaDelTransporte(eTransporte listaTransportes[], int tamanio, eLocalidad listaLocalidades[], int tamanioLocalidades, int *id)
+int AltaTransporte(eTransporte listaTransportes[], int tamanio, eLocalidad listaLocalidades[], int tamanioLocalidades, int *id)
 {
 	int retorno;
 	int i;
@@ -29,12 +29,13 @@ int CargaDelTransporte(eTransporte listaTransportes[], int tamanio, eLocalidad l
 
 	if(listaTransportes != NULL && tamanio > 0 && listaLocalidades != NULL && tamanioLocalidades > 0 && id != NULL)
 	{
+		printf("\n************************************************************************************");
 		for(i = 0; i < tamanio; i++)
 		{
 			if(listaTransportes[i].isEmpty == SIN_HACER)
 			{
 				listaTransportes[i] = UnTransporte(id, listaLocalidades, tamanioLocalidades);
-				index = BuscarLocalidadPorId(listaLocalidades, tamanioLocalidades, listaTransportes[i].idLocalidad);
+				index = BuscarPorIndice(listaLocalidades, tamanioLocalidades, listaTransportes[i].idLocalidad);
 
 				MostrarUnEnvio(listaTransportes[i], listaLocalidades[index]);
 
@@ -42,6 +43,7 @@ int CargaDelTransporte(eTransporte listaTransportes[], int tamanio, eLocalidad l
 				break;
 			}
 		}
+		printf("\n************************************************************************************");
 	}
 
 	return retorno;
@@ -63,7 +65,7 @@ eTransporte UnTransporte(int* id, eLocalidad listaLocalidades[], int tamanio)
 
 			do
 			{
-				IngresarEntero("\nIngrese el id de la localidad de la empresa: ", "\nIngreso invalido", &unTransporte.idLocalidad, 2);
+				IngresarEntero("\nIngrese el id de la localidad a la que quiere enviar el pedido: ", "\nIngreso invalido", &unTransporte.idLocalidad, 2);
 			}while(ValidarId(listaLocalidades, tamanio, unTransporte.idLocalidad) != 0);
 
 			if(PrecioYKmPorLocalidad(unTransporte.idLocalidad, &precio, &km) == 0)
@@ -71,7 +73,7 @@ eTransporte UnTransporte(int* id, eLocalidad listaLocalidades[], int tamanio)
 				unTransporte.precioDelEnvio = precio;
 				unTransporte.km = km;
 			}
-			IngresarCadenaAlfanumerica(unTransporte.patente, "\nIngrese la patente del transporte", "\nIngreso invalido", 7, 2);
+			IngresarCadenaAlfanumerica(unTransporte.patente, "\nIngrese la patente del transporte: ", "\nIngreso invalido", 7, 2);
 			unTransporte.isEmpty = EN_PREPARACION;
 		}
 	}
@@ -104,7 +106,7 @@ int CambiarEstadoTransporte(int id, eTransporte listaTransportes[], int tamanio,
 
 void MostrarUnEnvio(eTransporte unTransporte, eLocalidad unaLocalidad)
 {
-	printf("\n%d %s %.2f %.2f %s", unTransporte.id, unaLocalidad.localidad, unTransporte.precioDelEnvio,
+	printf("\n%d %s $%.2f %.2fkm %s", unTransporte.id, unaLocalidad.localidad, unTransporte.precioDelEnvio,
 								unTransporte.km, unTransporte.patente);
 }
 
@@ -124,6 +126,8 @@ int MostrarListaDeEnvios(eTransporte listaTransportes[], int tamanio, eLocalidad
 			{
 				index = BuscarLocalidadPorId(listaLocalidades, tamanioLocalidades, listaTransportes[i].idLocalidad);
 				MostrarUnEnvio(listaTransportes[i], listaLocalidades[index]);
+
+				retorno = 0;
 			}
 		}
 	}

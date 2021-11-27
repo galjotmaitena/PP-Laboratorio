@@ -1,10 +1,3 @@
-/*
- * Input.c
- *
- *  Created on: 14 oct 2021
- *      Author: EXOSMART
- */
-
 #include "Input.h"
 
 int Menu(char opciones[])

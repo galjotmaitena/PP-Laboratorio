@@ -281,7 +281,7 @@ int Contador(eEmpresa unaEmpresa, ePedido listaPedido[], int tamanioPedido, int*
 
 
 
-int EmpresasConPedidosEnviados(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, eTransporte listaTransportes[], int tamanioTransportes, eLocalidad listaLocalidad[], int tamanioLocalidad)
+int TotalDePedidosEnviados(ePedido listaPedido[], int tamanioPedido, eEmpresa lista[], int tamanio, eTransporte listaTransportes[], int tamanioTransportes, eLocalidad listaLocalidad[], int tamanioLocalidad)
 {
 	int retorno;
 	int i;
@@ -301,13 +301,17 @@ int EmpresasConPedidosEnviados(ePedido listaPedido[], int tamanioPedido, eEmpres
 		{
 			if(lista[i].isEmpty == FALSE)
 			{
-				if(BuscarPedidosDeUnaEmpresa(lista[i], listaPedido, tamanioPedido, listaTransportes, tamanioTransportes, &acumuladorKm, &acumuladorPrecio, &contadorPedidos) == 0)
+				if(BuscarPedidosEnviadosDeUnaEmpresa(lista[i], listaPedido, tamanioPedido, listaTransportes, tamanioTransportes, &acumuladorKm, &acumuladorPrecio, &contadorPedidos) == 0)
 				{
+					printf("\n*******************************************************************************************");
+
 					MostrarUnaEmpresa(lista[i], listaLocalidad, tamanioLocalidad);
 
 					printf("\nCantidad de pedidos enviados: %d", contadorPedidos);
 					printf("\nSuma de los km recorridos para los envios de la empresa: %.2f", acumuladorKm);
 					printf("\nTotal a pagar por todos los enviados: %.2f", acumuladorPrecio);
+
+					printf("\n*******************************************************************************************");
 				}
 			}
 		}
@@ -317,7 +321,7 @@ int EmpresasConPedidosEnviados(ePedido listaPedido[], int tamanioPedido, eEmpres
 	return retorno;
 }
 
-int BuscarPedidosDeUnaEmpresa(eEmpresa unaEmpresa, ePedido listaPedido[], int tamanioPedido, eTransporte listaTransportes[], int tamanioTransportes, float* acumuladorKm, float* acumuladorPrecio, int* contadorPedidos)
+int BuscarPedidosEnviadosDeUnaEmpresa(eEmpresa unaEmpresa, ePedido listaPedido[], int tamanioPedido, eTransporte listaTransportes[], int tamanioTransportes, float* acumuladorKm, float* acumuladorPrecio, int* contadorPedidos)
 {
 	int retorno;
 	int i;
@@ -337,13 +341,8 @@ int BuscarPedidosDeUnaEmpresa(eEmpresa unaEmpresa, ePedido listaPedido[], int ta
 		{
 			if(listaPedido[i].isEmpty == COMPLETADO && listaPedido[i].idEmpresa == unaEmpresa.id)
 			{
-				if(TotalKmyPrecioDeUnaEmpresa(listaPedido[i], listaTransportes, tamanioTransportes, &acumuladorKmAuxiliar, &acumuladorPrecioAuxiliar, &contadorAuxiliar) == 0)
+				if(AcumularKmYPrecioDelPedidoDeUnaEmpresa(listaPedido[i], listaTransportes, tamanioTransportes, &acumuladorKmAuxiliar, &acumuladorPrecioAuxiliar, &contadorAuxiliar) == 0)
 				{
-					printf("\n******************************************");
-					printf("\nKM %.2f", acumuladorKmAuxiliar);
-					printf("\nPRECIO %.2f", acumuladorPrecioAuxiliar);
-					printf("\nTOTAL PEDIDOS %d", contadorAuxiliar);
-					printf("\n******************************************");
 					retorno = 0;
 				}
 			}
@@ -357,19 +356,12 @@ int BuscarPedidosDeUnaEmpresa(eEmpresa unaEmpresa, ePedido listaPedido[], int ta
 	return retorno;
 }
 
-int TotalKmyPrecioDeUnaEmpresa(ePedido unPedido, eTransporte listaTransportes[], int tamanioTransportes, float* acumuladorKm, float* acumuladorPrecio, int* contadorPedidos)
+int AcumularKmYPrecioDelPedidoDeUnaEmpresa(ePedido unPedido, eTransporte listaTransportes[], int tamanioTransportes, float* acumuladorKm, float* acumuladorPrecio, int* contadorPedidos)
 {
 	int retorno;
 	int i;
-	int contadorAuxiliar;
-	float acumuladorKmAuxiliar;
-	float acumuladorPrecioAuxiliar;
 
 	retorno = -1;
-
-	contadorAuxiliar = 0;
-	acumuladorKmAuxiliar = 0;
-	acumuladorPrecioAuxiliar = 0;
 
 	if(listaTransportes != NULL && tamanioTransportes > 0 && acumuladorPrecio != NULL && acumuladorKm != NULL && contadorPedidos != NULL)
 	{
@@ -377,24 +369,14 @@ int TotalKmyPrecioDeUnaEmpresa(ePedido unPedido, eTransporte listaTransportes[],
 		{
 			if(listaTransportes[i].isEmpty == ENVIADO && listaTransportes[i].id == unPedido.idTransporte)
 			{
-				contadorAuxiliar++;
+				*contadorPedidos = 1 + *contadorPedidos;
 
-				acumuladorKmAuxiliar+= listaTransportes[i].km;
-				acumuladorPrecioAuxiliar+= listaTransportes[i].precioDelEnvio;
+				*acumuladorKm+= listaTransportes[i].km;
+				*acumuladorPrecio+= listaTransportes[i].precioDelEnvio;
 
 				retorno = 0;
 			}
 		}
-
-		*acumuladorKm = acumuladorKmAuxiliar;
-		*acumuladorPrecio = acumuladorPrecioAuxiliar;
-
-		*contadorPedidos = contadorAuxiliar;
-		printf("\n******************************************");
-		printf("\nFuncion TOTAL KM %.2f", acumuladorKmAuxiliar);
-		printf("\nFuncion TOTAL PRECIO %.2f", acumuladorPrecioAuxiliar);
-		printf("\nFuncion TOTAL TOTAL PEDIDOS %d", contadorAuxiliar);
-		printf("\n******************************************");
 	}
 
 	return retorno;

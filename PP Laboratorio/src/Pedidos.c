@@ -19,7 +19,7 @@ int InicializarPedidos(ePedido lista[], int tamanio)
 	return retorno;
 }
 
-int IngresarCantidadDeKilosARecolectar(ePedido listaPedido[], int tamanioPedido, int index, int*id)
+int AltaPedidos(ePedido listaPedido[], int tamanioPedido, int index, int*id)
 {
 	int retorno;
 
@@ -69,13 +69,6 @@ int BuscarPosicionPedido(ePedido lista[], int tamanio, int id)
 	return retorno;
 }
 
-void MostrarCantidadPorTipoDePlatico(ePedido pedido)
-{
-	printf("\nHDPE: %.2f \nLDPE: %.2f \nPP: %.2f", pedido.tiposDePlastico.hdpe,
-												   pedido.tiposDePlastico.ldpe,
-												   pedido.tiposDePlastico.pp);
-}
-
 int IngresarCantidadDeKilosPorTipo(ePedido listaPedido[], int index)
 {
 	int retorno;
@@ -98,4 +91,13 @@ int IngresarCantidadDeKilosPorTipo(ePedido listaPedido[], int index)
 	}
 
 	return retorno;
+}
+
+void MostrarCantidadPorTipoDePlatico(ePedido pedido)
+{
+	printf("\n************************************************************************************");
+	printf("\nHDPE: %-8.2f \nLDPE: %-8.2f \nPP: %-8.2f", pedido.tiposDePlastico.hdpe,
+												   	   	 pedido.tiposDePlastico.ldpe,
+														 pedido.tiposDePlastico.pp);
+	printf("\n************************************************************************************");
 }

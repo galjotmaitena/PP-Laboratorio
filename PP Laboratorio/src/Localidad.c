@@ -19,15 +19,9 @@ int InicializarLocalidad(eLocalidad lista[], int tamanio)
 	return retorno;
 }
 
-int MostrarUnaLocalidad(eLocalidad unaLocalidad)
+void MostrarUnaLocalidad(eLocalidad unaLocalidad)
 {
-	int retorno;
-
-	retorno = -1;
-
 	printf("\n%d %s", unaLocalidad.idLocalidad, unaLocalidad.localidad);
-
-	return retorno;
 }
 
 int MostrarListaLocalidades(eLocalidad listaLocalidades[], int tamanio)
@@ -39,14 +33,17 @@ int MostrarListaLocalidades(eLocalidad listaLocalidades[], int tamanio)
 
 	if(listaLocalidades != NULL && tamanio > 0)
 	{
+		printf("\n************************************************************************************");
 		printf("\nLOCALIDADES");
 		for(i = 0; i < tamanio; i++)
 		{
-			if(MostrarUnaLocalidad(listaLocalidades[i]) == 0)
+			if(listaLocalidades[i].isEmpty == FALSE)
 			{
+				MostrarUnaLocalidad(listaLocalidades[i]);
 				retorno = 0;
 			}
 		}
+		printf("\n************************************************************************************");
 	}
 
 	return retorno;
@@ -74,7 +71,7 @@ int ValidarId(eLocalidad listaLocalidades[], int tamanio, int id)
 	return retorno;
 }
 
-int BuscarLocalidadPorId(eLocalidad listaLocalidades[], int tamanio, int id)
+int BuscarPorIndice(eLocalidad listaLocalidades[], int tamanio, int id)
 {
 	int retorno;
 	int i;
@@ -96,7 +93,7 @@ int BuscarLocalidadPorId(eLocalidad listaLocalidades[], int tamanio, int id)
 	return retorno;
 }
 
-int BuscarPorIndice(eLocalidad listaLocalidades[], int tamanio, int index)
+int BuscarLocalidadPorId(eLocalidad listaLocalidades[], int tamanio, int index)
 {
 	int retorno;
 	int i;

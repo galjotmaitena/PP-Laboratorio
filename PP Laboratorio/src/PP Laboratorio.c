@@ -14,7 +14,7 @@ Galjot Maitena divB
 #define PENDIENTE 0
 #define COMPLETADO 1
 
-#define TAM 5
+#define TAM 100
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -56,7 +56,9 @@ int main(void) {
 				"\n6. Imprimir clientes con pedidos pendientes y cantidad de pedidos de recoleccion."
 				"\n7. Imprimir pedidos pendientes.\n8. Imprimir pedidos procesados."
 				"\n9. Pedidos pendientes en localidad.\n10. Promedio.\n11. Clientes con mas pedidos pendientes."
-				"\n12. Clientes con mas pedidos completados\n13. SALIR");
+				"\n12. Clientes con mas pedidos completados"
+				"\n13. Empresas con total de pedidos enviados, total a pagar y total de km a recorrer"
+				"\n14. SALIR");
 
 		switch(opcion)
 		{
@@ -118,7 +120,7 @@ int main(void) {
 
 				if(CrearPedido(empresas, TAM, pedidos, TAM, localidades, TAM, transportes, TAM, &idTransporte, &idPedido) == -1)
 				{
-					printf("No se pudo cargar el pedido");
+					printf("\nNo se pudo cargar el pedido");
 				}
 				else
 				{
@@ -136,7 +138,7 @@ int main(void) {
 				printf("\nProcesar residuos");
 				if(ProcesarResiduos(pedidos, TAM, empresas, TAM, transportes, TAM) == -1)
 				{
-					printf("No se pudo procesar el pedido");
+					printf("\nNo se pudo procesar el pedido");
 				}
 				else
 				{
@@ -155,7 +157,7 @@ int main(void) {
 
 				if(ImprimirClientesConPedidosPendientes(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
 				{
-					printf("No hay clientes con pedidos pendientes que mostrar");
+					printf("\nNo hay clientes con pedidos pendientes que mostrar");
 				}
 			}
 			else
@@ -171,7 +173,7 @@ int main(void) {
 				printf("\nPedidos Pendientes");
 				if(ImprimirPedidos(pedidos, TAM, empresas, TAM, PENDIENTE) == -1)
 				{
-					printf("No hay pedidos pendientes que mostrar");
+					printf("\nNo hay pedidos pendientes que mostrar");
 				}
 			}
 			else
@@ -188,7 +190,7 @@ int main(void) {
 				printf("\nPedidos Completados");
 				if(ImprimirPedidos(pedidos, TAM, empresas, TAM, COMPLETADO) == -1)
 				{
-					printf("No hay pedidos pendientes que mostrar");
+					printf("\nNo hay pedidos procesados que mostrar");
 				}
 			}
 			else
@@ -203,7 +205,7 @@ int main(void) {
 
 				if(BuscarPedidosPendientesPorLocalidad(pedidos, TAM, empresas, TAM, localidades, TAM) == -1)
 				{
-					printf("No hay pedidos pendientes que mostrar");
+					printf("\nNo hay pedidos pendientes que mostrar en la localidad");
 				}
 			}
 			else
@@ -212,34 +214,51 @@ int main(void) {
 			}
 			break;
 		case 10:
-			printf("\nPromedio");
-			if(ContarKilosDePP(pedidos, TAM, empresas, TAM) == -1)
+			if(flagPedidoProcesado == 1)
 			{
-				printf("\nERROR");
-			}
-			break;
-		case 11:
-			printf("\nCliente con mas pedidos pendientes");
-			if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, PENDIENTE) == -1)
-			{
-				printf("\nERROR");
-			}
-			break;
-		case 12:
-			printf("\nCliente con mas pedidos completados");
-			if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, COMPLETADO) == -1)
-			{
-				printf("\nERROR");
-			}
-			break;
-		case 13:
-			if(EmpresasConPedidosEnviados(pedidos, TAM, empresas, TAM, transportes, TAM, localidades, TAM) == 0)
-			{
-				printf("\nFUNCIONOOO");
+				printf("\nPromedio");
+				if(ContarKilosDePP(pedidos, TAM, empresas, TAM) == -1)
+				{
+					printf("\nNo se pudo calcular el promedio de kilos de PP por cliente");
+				}
 			}
 			else
 			{
-				printf("\nNo FUNCIONOOO");
+				printf("\nPrimero debe procesar un pedido");
+			}
+			break;
+		case 11:
+			if(flagPedidoPendiente == 1)
+			{
+				printf("\nCliente con mas pedidos pendientes");
+				if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, PENDIENTE) == -1)
+				{
+					printf("\nNo se encontraron clientes con la mayor cantidad de pedidos pendientes");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe crear un pedido");
+			}
+			break;
+		case 12:
+			if(flagPedidoProcesado == 1)
+			{
+				printf("\nCliente con mas pedidos completados");
+				if(ClientesConMasPedidios(pedidos, TAM, empresas, TAM, localidades, TAM, COMPLETADO) == -1)
+				{
+					printf("\nNo se encontraron clientes con la mayor cantidad de pedidos completados");
+				}
+			}
+			else
+			{
+				printf("\nPrimero debe procesar un pedido");
+			}
+			break;
+		case 13:
+			if(TotalDePedidosEnviados(pedidos, TAM, empresas, TAM, transportes, TAM, localidades, TAM) == -1)
+			{
+				printf("\nError");
 			}
 			break;
 		case 14:
